@@ -7,8 +7,8 @@ const Run = require("../models/Run");
 // @desc login/landing page
 // @route GET /
 router.get("/", ensureGuest, (req, res) => {
-  res.render("login", { layout: "login" });
-  //res.sendFile(__dirname + "/views/login.html");
+  res.send("Hello World!")
+  // res.render("login", { layout: "login" });
 });
 
 // @desc main application with CRUD for current user
@@ -16,12 +16,13 @@ router.get("/", ensureGuest, (req, res) => {
 router.get("/home", ensureAuth, async (req, res) =>
   {
   try {
-    let runs = await Run.find( {user: req.user.id}).lean();
-    runs = runs.reverse();
-    res.render('home', {
-      name: req.user.username,
-      runs,
-    });
+    res.send("Home")
+    // let runs = await Run.find( {user: req.user.id}).lean();
+    // runs = runs.reverse();
+    // res.render('home', {
+    //   name: req.user.username,
+    //   runs,
+    // });
   } catch (e) {
     console.log(e);
   }

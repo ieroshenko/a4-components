@@ -6,7 +6,6 @@ const exphbs = require("express-handlebars"); // 2
 const app = express();
 const session = require("express-session"); // 3
 const passport = require("passport");
-const User = require(__dirname + "/models/User.js");
 const MongoStore = require("connect-mongo")(session);
 const mongoose = require("mongoose");
 const methodOverride = require("method-override"); // 5
@@ -71,10 +70,9 @@ app.use(
 // Initializes passport and passport sessions
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(express.static("public"));
 
 // routes
-app.use('/', require('./routes/index'));
+app.use('/', require('./routes'));
 app.use('/auth', require('./routes/auth'));
 app.use('/runs', require('./routes/runs'));
 app.use('/users', require('./routes/users'));

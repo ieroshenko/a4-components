@@ -1,10 +1,11 @@
 {
-  "name": "a3-ivan-eroshenko",
-  "version": "0.0.1",
-  "description": "A simple Node app built on Express, instantly up and running.",
+  "name": "a4-ivan-eroshenko",
+  "version": "1.0.1",
+  "description": "A simple Node app built on Express + React for front-end.",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "dev": "nodemon server.js"
   },
   "dependencies": {
     "connect-mongo": "^3.2.0",
@@ -20,18 +21,19 @@
     "morgan": "^1.10.0",
     "node-notifier": "^8.0.0",
     "passport": "^0.4.1",
-    "passport-github2": "^0.1.12"
+    "passport-github2": "^0.1.12",
+    "react": "^16.13.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4",
+    "webpack": "^4.43.0"
   },
   "engines": {
     "node": "12.x"
   },
-  "repository": {
-    "url": "https://glitch.com/edit/#!/hello-express"
-  },
   "license": "MIT",
   "keywords": [
     "node",
-    "glitch",
     "express"
   ]
 }
