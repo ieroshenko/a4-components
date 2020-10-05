@@ -6,7 +6,7 @@ const User = require("../models/User");
 
 
 // @desc get number of users
-// @route GET /users/quantity
+// @route GET /api/users/quantity
 router.get("/quantity", ensureAuth, async (req, res) => {
   try {
     User.countDocuments({}, (err, count) => {

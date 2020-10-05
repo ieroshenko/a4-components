@@ -8,7 +8,6 @@ const Run = require("../models/Run");
 // @route GET /
 router.get("/", ensureGuest, (req, res) => {
   res.send("Hello World!")
-  // res.render("login", { layout: "login" });
 });
 
 // @desc main application with CRUD for current user
@@ -17,12 +16,6 @@ router.get("/home", ensureAuth, async (req, res) =>
   {
   try {
     res.send("Home")
-    // let runs = await Run.find( {user: req.user.id}).lean();
-    // runs = runs.reverse();
-    // res.render('home', {
-    //   name: req.user.username,
-    //   runs,
-    // });
   } catch (e) {
     console.log(e);
   }
