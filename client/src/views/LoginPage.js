@@ -17,7 +17,7 @@ const LoginPage = (props) => {
     }, []);
 
     const handleLoginWithGitHub = () => {
-        window.open("http://localhost:3080/auth/github", "_self");
+        window.open("/auth/github", "_self");
     };
 
 
