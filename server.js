@@ -12,6 +12,23 @@ const { ensureAuth } = require("./middleware/auth");
 const path = require('path');
 const mongoose = require("mongoose")
 
+const connectDB = async(MONGO_URI) => {
+    try {
+        const conn = await mongoose.connect(MONGO_URI, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+            useFindAndModify: false,
+        });
+
+
+        console.log(`MongoDB Connected: ${conn.connection.host}`)
+
+    } catch (e) {
+        console.log(e);
+        process.exit(1);
+    }
+}
+
 // load config
 dotenv.config({path: "./config/config.env"});
 
@@ -92,21 +109,3 @@ app.get('*', (req,res) => {
 const listener = app.listen(PORT, () => {
     console.log("Your app is listening on port " + listener.address().port);
 });
-
-
-const connectDB = async(MONGO_URI) => {
-    try {
-        const conn = await mongoose.connect(MONGO_URI, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-            useFindAndModify: false,
-        });
-
-
-        console.log(`MongoDB Connected: ${conn.connection.host}`)
-
-    } catch (e) {
-        console.log(e);
-        process.exit(1);
-    }
-}
