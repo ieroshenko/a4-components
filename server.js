@@ -59,7 +59,7 @@ app.use(morgan("dev"));
 connectDB(MONGO_URI);
 
 // passport config
-require("./config/passport.js")(passport);
+require("./passport.js")(passport);
 
 const PORT = process.env.PORT;
 
