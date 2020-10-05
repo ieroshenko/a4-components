@@ -1,18 +1,23 @@
 const cookieSession = require("cookie-session");
 const express = require("express");
 const dotenv = require("dotenv");
-const connectDB = require("./config/db");
 const morgan = require("morgan");
 const app = express();
 const session = require("express-session");
 const passport = require("passport");
 const MongoStore = require("connect-mongo")(session);
-const mongoose = require("mongoose");
-const methodOverride = require("method-override");
 const cookieParser = require("cookie-parser"); // parse cookie header
 const cors = require("cors");
 const { ensureAuth } = require("./middleware/auth");
 const path = require('path');
+const mongoose = require("mongoose")
+
+// load config
+dotenv.config({path: "./config/config.env"});
+
+const MONGO_URI = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0.xaktw.mongodb.net/runningtracker?retryWrites=true&w=majority`
+
+console.log(MONGO_URI);
 
 app.use(express.urlencoded({extended: false}));
 app.use(express.json());
@@ -34,10 +39,7 @@ app.use(cookieParser());
 // morgan logging
 app.use(morgan("dev"));
 
-connectDB();
-
-// load config
-dotenv.config({path: "./config/config.env"});
+connectDB(MONGO_URI);
 
 // passport config
 require("./config/passport.js")(passport);
@@ -90,3 +92,21 @@ app.get('*', (req,res) => {
 const listener = app.listen(PORT, () => {
     console.log("Your app is listening on port " + listener.address().port);
 });
+
+
+const connectDB = async(MONGO_URI) => {
+    try {
+        const conn = await mongoose.connect(MONGO_URI, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+            useFindAndModify: false,
+        });
+
+
+        console.log(`MongoDB Connected: ${conn.connection.host}`)
+
+    } catch (e) {
+        console.log(e);
+        process.exit(1);
+    }
+}
