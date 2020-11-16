@@ -34,7 +34,6 @@ dotenv.config({path: "./config/config.env"});
 
 const MONGO_URI = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0.xaktw.mongodb.net/runningtracker?retryWrites=true&w=majority`
 
-console.log(MONGO_URI);
 
 app.use(express.urlencoded({extended: false}));
 app.use(express.json());

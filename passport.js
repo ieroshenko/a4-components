@@ -9,7 +9,7 @@ module.exports = function(passport) {
       {
         clientID: process.env.GITHUB_CLIENT_ID,
         clientSecret: process.env.GITHUB_CLIENT_SECRET,
-        callbackURL: "https://a4-ivan-eroshenko.herokuapp.com/auth/github/callback"
+        callbackURL: "http://localhost:3080/auth/github/callback"
       },
       async (accessToken, refreshToken, profile, done) => {
         const newUser = {githubId: profile.id, username: profile.username};

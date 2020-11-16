@@ -1,8 +1,16 @@
+const AWS = require('aws-sdk');
 const express = require("express");
 const router = express.Router();
 const {ensureAuth} = require("../middleware/auth");
+const uuid = require('uuid');
 
-const Run = require("../models/Run");
+AWS.config.update({
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+    region: process.env.REGION,
+});
+
+const docClient = new AWS.DynamoDB.DocumentClient();
 
 const calculateCalories = (miles, mph) => {
     return miles * 100 + mph * 3;
@@ -17,20 +25,38 @@ router.post("/", ensureAuth, async (req, res) => {
         let calories = calculateCalories(miles, mph);
         let notes = req.body.notes;
 
-        let run = {
-            user: req.user.id,
-            miles: miles,
-            mph: mph,
-            notes: notes,
-            caloriesBurnt: calories
+        const runId = uuid.v1();
+
+        const params = {
+            TableName: 'Runs',
+            Item: {
+                RunId: runId,
+                miles: miles,
+                mph: mph,
+                notes: notes,
+            }
         };
 
-        let theRun = await Run.create(run);
+        docClient.put(params, (err, data) => {
+            if (err) {
+                console.log(err);
+                res.send({
+                    success: false,
+                    message: 'Error: Server error'
+                });
+            } else {
+                console.log('data', data);
+                const {items} = data;
+                console.log(data);
 
-        res.status(200).send({
-            message: "run successfully created",
-            id: theRun._id,
-            caloriesBurnt: calories
+                console.log(items);
+
+                res.status(200).send({
+                    message: "run successfully created",
+                    id: runId,
+                    caloriesBurnt: 0
+                });
+            }
         });
     } catch (e) {
         console.log(e);
@@ -47,7 +73,7 @@ router.put("/update", ensureAuth, async (req, res) => {
 
         let runId = req.body.id;
 
-        const run = await Run.findOne({_id: runId});
+        const run = null;
 
         if (run) {
             run.miles = parseInt(req.body.miles);
@@ -75,7 +101,7 @@ router.put("/update", ensureAuth, async (req, res) => {
 // @route DELETE /api/runs/:id
 router.delete("/:id", ensureAuth, async (req, res) => {
     try {
-        await Run.deleteOne({_id: req.params.id});
+
         res.status(200).send({
             message: "run successfully deleted",
         });
@@ -91,12 +117,25 @@ router.delete("/:id", ensureAuth, async (req, res) => {
 // @route GET /api/runs
 router.get("/", ensureAuth, async (req, res) => {
     try {
-        console.log('here?');
-        let runs = await Run.find({user: req.user.id});
-        res.status(200).send({
-            message: "runs successfully obtained",
-            runs: runs,
-        });
+
+        const params = {
+            TableName: 'Runs'
+        };
+
+        docClient.scan(params, (err, data) => {
+            if (err) {
+                res.send({
+                    success: false,
+                    message: 'Error: Server error'
+                });
+            } else {
+                const {Items} = data;
+                res.status(200).send({
+                    message: "runs successfully obtained",
+                    runs: Items,
+                });
+            }
+        })
     } catch (e) {
         console.log(e);
         res.status(401).send({

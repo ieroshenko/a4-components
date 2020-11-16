@@ -9,7 +9,9 @@
     "heroku-postbuild": "cd client && npm install && npm run build"
   },
   "dependencies": {
+    "aws-sdk": "^2.792.0",
     "connect-mongo": "^3.2.0",
+    "cookie-parser": "^1.4.5",
     "cookie-session": "^1.4.0",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
@@ -25,7 +27,7 @@
     "node-notifier": "^8.0.0",
     "passport": "^0.4.1",
     "passport-github2": "^0.1.12",
-    "cookie-parser": "^1.4.5"
+    "uuid": "^8.3.1"
   },
   "devDependencies": {
     "nodemon": "^2.0.4"
